@@ -1,0 +1,42 @@
+{
+    "remote" : 
+    {
+	"host": "ondemand.saucelabs.com", 
+	"port": 80,
+	"username" : "<USERNAME>", 
+	"accessKey" : "<ACCESS>"
+    }
+    ,
+    "desired" :[
+	{
+	    "tags": ["examples"]
+	    , "name": "parallel test 1/4"
+	    , "browserName": "firefox"
+	    , "javascriptEnabled": true
+	}
+	,
+	{
+	    "tags": ["examples"]
+	    , "name": "parallel test 2/4"
+	    , "browserName": "chrome"
+	    , "javascriptEnabled": true
+	}
+	,
+	{
+	    "tags": ["examples"]
+	    , "name": "parallel test 3/4"
+	    , "browserName": "firefox"
+	    , "platform": "LINUX"
+	    , "javascriptEnabled": true
+	}
+	,
+	{
+	    "tags": ["examples"]
+	    , "name": "parallel test 4/4"
+	    , "browserName": "chrome"
+	    , "platform": "LINUX"
+	    , "javascriptEnabled": true
+	}
+    ]
+}
+
