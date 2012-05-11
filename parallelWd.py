@@ -6,19 +6,21 @@ class Remote(object):
     """
     """
     
-    def __init__(self, desired_capabilities, command_executor):
+    def __init__(self, desired_capabilities=None, command_executor=None):
         """
         
         Arguments:
         - `desired_capabilities`: Array of desired_capabilities
         - `command_executor`: Id string
         """
-        
+
+        print type(command_executor)
         self._command_executor = command_executor
         self._drivers = []
 
         #Set up all webdrivers
-        self.__create_drivers(desired_capabilities)
+        if desired_capabilities != None and command_executor != None:
+            self.__create_drivers(desired_capabilities)
         
     def load_config_file(self, file):
         """Open json file and load config from it
@@ -26,11 +28,15 @@ class Remote(object):
         Arguments:
         - `file`: json file containing conf
         """
-        conf = json.load(file)
+        fd = open(file)
+        conf = json.load(fd)
+        self._command_executor = self.__build_command_executor(conf['remote'])
 
+        self.__create_drivers(conf['desired'])
 
-    def __build_command_executor(self, conf)
-        return 'http://'+conf['username']+':'+conf['accessKey']+'@'+conf['host']+':'+conf['port']+'/wd/hub'
+    def __build_command_executor(self, remote):
+        return str('http://'+remote['username']+':'+remote['accessKey']+'@'+\
+            remote['host']+':'+str(remote['port'])+'/wd/hub')
 
     def __create_drivers(self, desired_capabilities):
         """Create  webdrives from desired capabilities
@@ -39,6 +45,7 @@ class Remote(object):
         - `self`:
         - `desired_capabilities`:
         """
+        print self._command_executor
         for d in desired_capabilities:
             self._drivers += [webdriver.Remote(desired_capabilities=d,
                                                command_executor=self._command_executor)]
