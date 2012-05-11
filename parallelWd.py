@@ -1,5 +1,6 @@
 from selenium import webdriver 
 import unittest
+import json
 
 class Remote(object):
     """
@@ -25,6 +26,11 @@ class Remote(object):
         Arguments:
         - `file`: json file containing conf
         """
+        conf = json.load(file)
+
+
+    def __build_command_executor(self, conf)
+        return 'http://'+conf['username']+':'+conf['accessKey']+'@'+conf['host']+':'+conf['port']+'/wd/hub'
 
     def __create_drivers(self, desired_capabilities):
         """Create  webdrives from desired capabilities
