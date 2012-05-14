@@ -1,16 +1,24 @@
 import unittest
 from selenium import webdriver
-import parallelWd
 import copy
+
+import sys, os
+
+PATH = lambda f: os.path.join(os.path.dirname(os.path.abspath(__file__)), f)
+                              
+path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+sys.path.append(path)
+import wd.parallel
+
 
 class Selenium2OnSauce(unittest.TestCase):
 
     def setUp(self):
-        self.drivers = parallelWd.Remote()
-        self.drivers.load_config_file("config.json")
+        self.drivers = wd.parallel.Remote()
+        self.drivers.load_config_file(os.path.join(PATH("config.json")))
         
 
-    @parallelWd.multiply
+    @wd.parallel.multiply
     def test_sauce(self):
         self.driver.get('http://saucelabs.com/test/guinea-pig')
         self.assertTrue("I am a page title - Sauce Labs" in self.driver.title);
@@ -25,7 +33,7 @@ class Selenium2OnSauce(unittest.TestCase):
         body = self.driver.find_element_by_xpath('//body')
         self.assertTrue('I am some other page content' in body.text)
 
-    @parallelWd.multiply
+    @wd.parallel.multiply
     def tearDown(self):
         self.driver.quit()
 

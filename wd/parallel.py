@@ -14,7 +14,6 @@ class Remote(object):
         - `command_executor`: Id string
         """
 
-        print type(command_executor)
         self._command_executor = command_executor
         self._drivers = []
 
@@ -45,7 +44,6 @@ class Remote(object):
         - `self`:
         - `desired_capabilities`:
         """
-        print self._command_executor
         for d in desired_capabilities:
             self._drivers += [webdriver.Remote(desired_capabilities=d,
                                                command_executor=self._command_executor)]
