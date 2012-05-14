@@ -1,6 +1,7 @@
 # python-parallel-wd -- Run selenium test in multiple browsers easily - Python flavor
 
 ## Install
+...
 
 ## Authors
 
@@ -13,7 +14,7 @@
 ## Usage
 ...
 
-## Writing a test!
+## Writing a test !
 
 Start by importing the module 
 
@@ -21,12 +22,23 @@ Start by importing the module
 import wd.parallel
 </pre>
 
+The test should be implemented as a unittest TestCase. So go ahead and do that 
+
 <pre>
 class Selenium2OnSauce(unittest.TestCase):
+</pre>
+
+In the set up you should create your browsers configurations. Or you could just load them from a json file.
+
+<pre>
     def setUp(self):
         self.drivers = wd.parallel.Remote()
         self.drivers.load_config_file(os.path.join(PATH("config.json")))
+</pre>
 
+Now just write your test as you would for a unique browser. Test should be run on the self.driver attribute. Just use the @multiply decoration to run the test in all the browser you set up. Check out the <a href='#'>selenium</a> documentation for available methods.
+
+<pre>
     @wd.parallel.multiply
     def test_sauce(self):
         self.driver.get('http://saucelabs.com/test/guinea-pig')
@@ -42,6 +54,11 @@ class Selenium2OnSauce(unittest.TestCase):
         body = self.driver.find_element_by_xpath('//body')
         self.assertTrue('I am some other page content' in body.text)
 
+</pre>
+
+The tear down method works just like the test cases. Just work as if there was one browser and add the @multiply decorator.
+
+<pre>
     @wd.parallel.multiply
     def tearDown(self):
         self.driver.quit()
@@ -51,6 +68,7 @@ if __name__ == '__main__':
 </pre>
 
 ## Supported Methods
+Check out the python wd <a href='#'>implementation<a> it has all the documentation about actual tests.
 
 ## More docs!
 <pre>
@@ -58,12 +76,3 @@ WD is simply implementing the Selenium JsonWireProtocol, for more details see th
  - <a href="http://code.google.com/p/selenium/wiki/JsonWireProtocol">http://code.google.com/p/selenium/wiki/JsonWireProtocol</a>
 </pre>
 
-## Run the tests!
-<pre>
-  - Run the selenium server with chromedriver: 
-      java -jar selenium-server-standalone-2.21.0.jar -Dwebdriver.chrome.driver=&lt;PATH&gt;/chromedriver
-  - cd wd
-  - npm install .
-  - make test
-  - look at the results!
-</pre>
