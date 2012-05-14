@@ -1,0 +1,6 @@
+#pyc files
+*.pyc
+*.pyo
+
+#emacs save files
+*\.#*
