@@ -36,7 +36,7 @@ In the set up you should create your browsers configurations. Or you could just 
         self.drivers.load_config_file(os.path.join(PATH("config.json")))
 </pre>
 
-Now just write your test as you would for a unique browser. Test should be run on the self.driver attribute. Just use the @multiply decoration to run the test in all the browser you set up. Check out the <a href='#'>selenium</a> documentation for available methods.
+Now just write your test as you would for a unique browser. Test should be run on the self.driver attribute. Just use the @multiply decoration to run the test in all the browser you set up. Check out the <a href='http://code.google.com/p/selenium/wiki/PythonBindings'>selenium</a> documentation for available methods.
 
 <pre>
     @wd.parallel.multiply
@@ -68,7 +68,7 @@ if __name__ == '__main__':
 </pre>
 
 ## Supported Methods
-Check out the python wd <a href='#'>implementation<a> it has all the documentation about actual tests.
+Check out the python wd <a href='http://code.google.com/p/selenium/wiki/PythonBindings'>implementation</a> it has all the documentation about actual tests.
 
 ## More docs!
 <pre>
