@@ -33,7 +33,7 @@ In the set up you should create your browsers configurations. Or you could just 
 <pre>
     def setUp(self):
         self.drivers = wd.parallel.Remote()
-        self.drivers.load_config_file(os.path.join(PATH("config.json")))
+        self.drivers.load_config_file(/path/to/your/config/file.json)
 </pre>
 
 Now just write your test as you would for a unique browser. Test should be run on the self.driver attribute. Just use the @multiply decoration to run the test in all the browser you set up. Check out the <a href='http://code.google.com/p/selenium/wiki/PythonBindings'>selenium</a> documentation for available methods.
