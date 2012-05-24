@@ -1,6 +1,6 @@
 import unittest
+import wd.parallel
 from selenium import webdriver
-import parallelWd
 import copy
 
 class Selenium2OnSauce(unittest.TestCase):
@@ -22,14 +22,14 @@ class Selenium2OnSauce(unittest.TestCase):
         browser['tags'] = "Parallel"
         desired_capabilities += [browser]
 
-        self.drivers = parallelWd.Remote(
+        self.drivers = wd.parallel.Remote(
             desired_capabilities=desired_capabilities,
-            command_executor="http://msabourin:d37ee0b6-723b-4b4d-8933-52623541b998@ondemand.saucelabs.com:80/wd/hub"
+            command_executor=""
         )
         
         #self.driver.implicitly_wait(30)
 
-    @parallelWd.multiply
+    @wd.parallel.multiply
     def test_sauce(self):
         self.driver.get('http://saucelabs.com/test/guinea-pig')
         self.assertTrue("I am a page title - Sauce Labs" in self.driver.title);
@@ -44,7 +44,7 @@ class Selenium2OnSauce(unittest.TestCase):
         body = self.driver.find_element_by_xpath('//body')
         self.assertTrue('I am some other page content' in body.text)
 
-    @parallelWd.multiply
+    @wd.parallel.multiply
     def tearDown(self):
         self.driver.quit()
 
