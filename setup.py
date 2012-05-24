@@ -11,7 +11,7 @@ def read(fname):
 setup(
     name = "python-wd-parallel",
     packages = ['wd'],
-    version = "0.0.3",
+    version = "0.1.0",
     author = "Mathieu Sabourin",
     author_email = "mathieu.c.sabourin@gmail.com",
     maintainer = "Mathieu Sabourin",

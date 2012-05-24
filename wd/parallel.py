@@ -56,7 +56,7 @@ class Remote(object):
         except AttributeError as e:
             self._drivers = [wd]
 
-        print repr(len(self._drivers)) + ' drivers registered'
+        
             
             
 def multiply(test):
@@ -76,7 +76,6 @@ def multiply(test):
             if queue != None:
                 queue.put(driver)
 
-        print 'Launching test'
         f(SubTest(driver))
         
     def wrapper(*args, **kwargs):
@@ -86,13 +85,11 @@ def multiply(test):
         nb_d = 0
 
         try:
-            print repr(len(args[0].drivers._drivers)) + ' drivers.'
             for d in args[0].drivers._drivers:
                 t = multiprocessing.Process(target=thread_func, args=(test,), kwargs={'driver': d})
                 t.start()
                 threads += [t]
                 i += 1
-                print "One thread started | " +repr(i)+ " threads running"
                 
         except AttributeError:
             for c in args[0].drivers._desired_capabilities:
@@ -104,8 +101,7 @@ def multiply(test):
                 t.start()
                 threads += [t]
                 i += 1
-                print "One thread started | " +repr(i)+ " threads running"
-
+            
             while nb_d < len(args[0].drivers._desired_capabilities):
                 driver = queue.get(block=True)
                 args[0].drivers.register(driver)
@@ -114,7 +110,6 @@ def multiply(test):
         for t in threads:
             t.join()
             i -= 1
-            print "One thread stopped | " +repr(i)+ " threads running"
             
         # o = SubTest(d)
         # test(o)

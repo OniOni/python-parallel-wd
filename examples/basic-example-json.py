@@ -15,7 +15,7 @@ class Selenium2OnSauce(unittest.TestCase):
 
     def setUp(self):
         self.drivers = wd.parallel.Remote()
-        self.drivers.load_config_file(os.path.join(PATH("myconfig.json")))
+        self.drivers.load_config_file(os.path.join(PATH("config.json")))
         
 
     @wd.parallel.multiply
