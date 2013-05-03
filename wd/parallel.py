@@ -1,4 +1,4 @@
-from selenium import webdriver 
+from selenium import webdriver
 import unittest
 import json
 import multiprocessing
@@ -6,10 +6,10 @@ import multiprocessing
 class Remote(object):
     """
     """
-    
+
     def __init__(self, desired_capabilities=None, command_executor=None):
         """
-        
+
         Arguments:
         - `desired_capabilities`: Array of desired_capabilities
         - `command_executor`: Id string
@@ -18,14 +18,13 @@ class Remote(object):
         self._command_executor = command_executor
 
         #Set up all webdrivers
-        if desired_capabilities != None and command_executor != None:
-        #    self.__create_drivers(desired_capabilities)
+        if desired_capabilities != None:
             self._desired_capabilities = desired_capabilities
-        
-        
+
+
     def load_config_file(self, file):
         """Open json file and load config from it
-        
+
         Arguments:
         - `file`: json file containing conf
         """
@@ -42,23 +41,28 @@ class Remote(object):
 
     def __create_drivers(self, desired_capabilities):
         """Create  webdrives from desired capabilities
-        
+
         Arguments:
         - `self`:
         - `desired_capabilities`:
         """
         for d in desired_capabilities:
-            self._drivers += [webdriver.Remote(desired_capabilities=d,
-                                               command_executor=self._command_executor)]
+            kwargs = {}
+            kwargs['desired_capabilities'] = d
+
+            if command_executor != None:
+                kwargs['command_executor'] = self._command_executor
+
+            self._drivers += [webdriver.Remote(**kwargs)]
+
     def register(self, wd):
         try:
             self._drivers += [wd]
         except AttributeError as e:
             self._drivers = [wd]
 
-        
-            
-            
+
+
 def multiply(test):
     """Make test run in mutiple browsers
     """
@@ -71,13 +75,18 @@ def multiply(test):
     def thread_func(f, dc=None, ce=None, driver=None, queue=None):
 
         if driver == None and dc != None:
-            driver = webdriver.Remote(desired_capabilities=dc,
-                                      command_executor=ce)
+            kwargs = {}
+            kwargs['desired_capabilities'] = dc
+
+            if ce != None:
+                kwargs['command_executor'] = ce
+
+            driver = webdriver.Remote(**kwargs)
             if queue != None:
                 queue.put(driver)
 
         f(SubTest(driver))
-        
+
     def wrapper(*args, **kwargs):
         threads = []
         queue = multiprocessing.Queue(len(args[0].drivers._desired_capabilities) + 1)
@@ -90,18 +99,19 @@ def multiply(test):
                 t.start()
                 threads += [t]
                 i += 1
-                
+
         except AttributeError:
             for c in args[0].drivers._desired_capabilities:
                 t = multiprocessing.Process(target=thread_func, args=(test,),
-                                            kwargs={'dc': c,
-                                             'ce': args[0].drivers._command_executor,
-                                             'queue': queue
-                                                })
+                                            kwargs={
+                                                'dc': c,
+                                                'ce': args[0].drivers._command_executor,
+                                                'queue': queue
+                                            })
                 t.start()
                 threads += [t]
                 i += 1
-            
+
             while nb_d < len(args[0].drivers._desired_capabilities):
                 driver = queue.get(block=True)
                 args[0].drivers.register(driver)
@@ -110,9 +120,5 @@ def multiply(test):
         for t in threads:
             t.join()
             i -= 1
-            
-        # o = SubTest(d)
-        # test(o)
-            
-    return wrapper
 
+    return wrapper
