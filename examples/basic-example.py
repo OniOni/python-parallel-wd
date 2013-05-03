@@ -6,28 +6,16 @@ import copy
 class Selenium2OnSauce(unittest.TestCase):
 
     def setUp(self):
-        desired_capabilities = []
-
-        browser = copy.copy(webdriver.DesiredCapabilities.FIREFOX)
-        browser['version'] = '10'
-        browser['platform'] = 'XP'
-        browser['name'] = 'Python at Sauce 1/2'
-        browser['tags'] = "Parallel"
-        desired_capabilities += [browser]
-
-        browser = copy.copy(webdriver.DesiredCapabilities.FIREFOX)
-        browser['version'] = '10'
-        browser['platform'] = 'LINUX'
-        browser['name'] = 'Python at Sauce 2/2'
-        browser['tags'] = "Parallel"
-        desired_capabilities += [browser]
+        desired_capabilities = [
+            webdriver.DesiredCapabilities.FIREFOX,
+            webdriver.DesiredCapabilities.FIREFOX,
+            webdriver.DesiredCapabilities.CHROME
+        ]
 
         self.drivers = wd.parallel.Remote(
-            desired_capabilities=desired_capabilities,
-            command_executor=""
+            desired_capabilities=desired_capabilities
         )
-        
-        #self.driver.implicitly_wait(30)
+
 
     @wd.parallel.multiply
     def test_sauce(self):
@@ -50,4 +38,3 @@ class Selenium2OnSauce(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
