@@ -5,4 +5,4 @@ version:
 
 install: pip install .
 
-script: python wd/parallel.py
+script: python tests/test.py
