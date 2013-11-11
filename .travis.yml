@@ -1,0 +1,8 @@
+language: python
+version:
+  - "2.7"
+  - "pypy"
+
+install: pip install .
+
+script: python wd/parallel.py
