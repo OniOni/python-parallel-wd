@@ -1,13 +1,16 @@
 # python-parallel-wd -- Run selenium test in multiple browsers easily - Python flavor
 
+## Status
+[![Build Status](https://travis-ci.org/OniOni/python-parallel-wd.png?branch=master)](https://travis-ci.org/OniOni/python-parallel-wd)
+
 ## Install
 ```shell
-pip install python-wd-parallel 
+pip install python-wd-parallel
 ```
 
 ## Authors
 
-  - Mathieu Sabourin ([OniOni](http://github.com/OniOni))  
+  - Mathieu Sabourin ([OniOni](http://github.com/OniOni))
 
 ## License
 
@@ -15,13 +18,13 @@ pip install python-wd-parallel
 
 ## Writing a test !
 
-Start by importing the module 
+Start by importing the module
 
 ```python
 import wd.parallel
 ```
 
-The test should be implemented as a unittest TestCase. So go ahead and do that 
+The test should be implemented as a unittest TestCase. So go ahead and do that
 
 ```python
 class Selenium2OnSauce(unittest.TestCase):
@@ -74,4 +77,3 @@ Check out the python wd <a href='http://code.google.com/p/selenium/wiki/PythonBi
 WD is simply implementing the Selenium JsonWireProtocol, for more details see the official docs:
  - <a href="http://code.google.com/p/selenium/wiki/JsonWireProtocol">http://code.google.com/p/selenium/wiki/JsonWireProtocol</a>
 </pre>
-
