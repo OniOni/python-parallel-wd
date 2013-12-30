@@ -62,7 +62,6 @@ class Remote(object):
             self._drivers = [wd]
 
 
-
 def multiply(test):
     """Make test run in mutiple browsers
     """
@@ -72,17 +71,16 @@ def multiply(test):
             self.driver = driver
             self.driver.implicitly_wait(30)
 
+
     def thread_func(f, driver=None, queue=None):
         try:
             f(SubTest(driver))
         except Exception as e:
             print e
 
-
     def wrapper(*args, **kwargs):
         threads = []
         queue = multiprocessing.Queue(len(args[0].drivers._desired_capabilities) + 1)
-        pool = multiprocessing.Pool(processes=4)
         i = 0
 
         if not hasattr(args[0].drivers, "_drivers"):
@@ -95,15 +93,13 @@ def multiply(test):
                 driver = webdriver.Remote(**kwargs)
                 args[0].drivers.register(driver)
 
-
         for d in args[0].drivers._drivers:
-                t = multiprocessing.Process(target=thread_func, args=(test,), kwargs={'driver': d})
-                t.start()
-                threads += [t]
-                i += 1
+            t = multiprocessing.Process(target=thread_func, args=(test, d))
+            t.start()
+            threads += [t]
 
         for t in threads:
             t.join()
-            i -= 1
+
 
     return wrapper
