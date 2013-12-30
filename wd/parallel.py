@@ -72,50 +72,35 @@ def multiply(test):
             self.driver = driver
             self.driver.implicitly_wait(30)
 
-    def thread_func(f, dc=None, ce=None, driver=None, queue=None):
+    def thread_func(f, driver=None, queue=None):
+        try:
+            f(SubTest(driver))
+        except Exception as e:
+            print e
 
-        if driver == None and dc != None:
-            kwargs = {}
-            kwargs['desired_capabilities'] = dc
-
-            if ce != None:
-                kwargs['command_executor'] = ce
-
-            driver = webdriver.Remote(**kwargs)
-            if queue != None:
-                queue.put(driver)
-
-        f(SubTest(driver))
 
     def wrapper(*args, **kwargs):
         threads = []
         queue = multiprocessing.Queue(len(args[0].drivers._desired_capabilities) + 1)
+        pool = multiprocessing.Pool(processes=4)
         i = 0
-        nb_d = 0
 
-        try:
-            for d in args[0].drivers._drivers:
+        if not hasattr(args[0].drivers, "_drivers"):
+            for c in args[0].drivers._desired_capabilities:
+                kwargs = {'desired_capabilities': c}
+
+                if args[0].drivers._command_executor != None:
+                    kwargs['command_executor'] = args[0].drivers._command_executor
+
+                driver = webdriver.Remote(**kwargs)
+                args[0].drivers.register(driver)
+
+
+        for d in args[0].drivers._drivers:
                 t = multiprocessing.Process(target=thread_func, args=(test,), kwargs={'driver': d})
                 t.start()
                 threads += [t]
                 i += 1
-
-        except AttributeError:
-            for c in args[0].drivers._desired_capabilities:
-                t = multiprocessing.Process(target=thread_func, args=(test,),
-                                            kwargs={
-                                                'dc': c,
-                                                'ce': args[0].drivers._command_executor,
-                                                'queue': queue
-                                            })
-                t.start()
-                threads += [t]
-                i += 1
-
-            while nb_d < len(args[0].drivers._desired_capabilities):
-                driver = queue.get(block=True)
-                args[0].drivers.register(driver)
-                nb_d += 1
 
         for t in threads:
             t.join()
